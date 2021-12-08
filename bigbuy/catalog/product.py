@@ -34,5 +34,5 @@ def get_dummy_products():
 
 
 if __name__ == "__main__":
-    dummy_products = get_dummy_products()
-    print(dummy_products[1:3])
+    products = get_dummy_products()
+    print(products[1:3])
