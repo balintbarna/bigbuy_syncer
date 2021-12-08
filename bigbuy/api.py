@@ -17,8 +17,16 @@ def get_auth_header():
     return {'Authorization': 'Bearer {}'.format(api_key)}
 
 
+def get_production_url():
+    return "https://api.bigbuy.eu"
+
+
+def get_sandbox_url():
+    return "https://api.sandbox.bigbuy.eu"
+
+
 def get_base_url():
-    return "https://api.sandbox.bigbuy.eu/rest" # TODO change to production URL once it's ready
+    return "{}/rest".format(get_sandbox_url()) # TODO change to production URL once it's ready
 
 
 if __name__ == "__main__":
