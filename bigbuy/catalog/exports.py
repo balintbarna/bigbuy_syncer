@@ -49,7 +49,6 @@ def find_product_for_variant(variant, product_list):
             return product
 
 
-
 if __name__ == "__main__":
     find_matching_product_and_variant()
     compare_product_and_variant_numbers()
