@@ -13,6 +13,17 @@ def get_variations(dummy = False):
     return v.get_variations() if not dummy else v.get_dummy_variations()
 
 
-if __name__ == "__main__":
+def find_matching_product_and_variant():
     prods = get_products(dummy=True)
     vars = get_variations(dummy=True)
+    for variant in vars:
+        for product in prods:
+            if variant["product"] == product["id"]:
+                print("found a match")
+                print(product)
+                print(variant)
+                return
+
+
+if __name__ == "__main__":
+    find_matching_product_and_variant()
