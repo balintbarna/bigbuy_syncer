@@ -1,3 +1,6 @@
+import requests
+
+
 def read_api_key():
     try:
         with open("api_key") as f:
@@ -16,3 +19,8 @@ def get_auth_header():
 
 def get_base_url():
     return "https://api.sandbox.bigbuy.eu/rest" # TODO change to production URL once it's ready
+
+
+if __name__ == "__main__":
+    url = "{}/catalog/productvariations/{}.json".format(get_base_url(), 14368)
+    print(requests.get(url, headers=get_auth_header()).text)
