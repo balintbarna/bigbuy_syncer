@@ -40,6 +40,6 @@ def save_dummy_information():
 
 
 if __name__ == "__main__":
-    save_dummy_information()
+    # save_dummy_information()
     items = get_dummy_information()
     print(items[0:3])
