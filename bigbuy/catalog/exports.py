@@ -96,8 +96,8 @@ def tag_belongs_to_item(tag, item):
 
 if __name__ == "__main__":
     cd = CatalogData(True)
-    for container in cd.list_of_lists:
-        container.save_dummy_list()
+    # for container in cd.list_of_lists:
+    #     container.save_dummy_list()
     cd.find_matching_product_and_variant()
     cd.cross_examine_product_and_variant_numbers()
     cd.cross_examine_tags_and_products()
