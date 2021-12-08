@@ -3,10 +3,10 @@ import requests
 
 def read_api_key():
     try:
-        with open("api_key") as f:
+        with open("bigbuy_api_key") as f:
             return f.readline()
     except:
-        print("Must have top-level file called \"api_key\" which contains only the secret key in one line")
+        print("Must have top-level file called \"bigbuy_api_key\" which contains only the secret key in one line")
 
 
 api_key = read_api_key()
