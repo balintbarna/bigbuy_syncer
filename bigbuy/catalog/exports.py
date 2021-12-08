@@ -21,7 +21,7 @@ def find_matching_product_and_variant():
             if variant["product"] == product["id"]:
                 print("found a match")
                 print(product)
-                print(variant)
+                print(find_variants_for_product(product, vars))
                 return
 
 
@@ -43,10 +43,19 @@ def compare_product_and_variant_numbers():
 
 
 def find_product_for_variant(variant, product_list):
-    product_id = variant["product"]
-    for product in product_list:
-        if product["id"] == product_id:
-            return product
+    matching_products = [p for p in product_list if variant_belongs_to_product(variant, p)]
+    if len(matching_products) > 1:
+        raise Exception("Variant matches multiple products, bad data")
+    if len(matching_products) < 1:
+        raise Exception("Variant has no matching product in database")
+
+
+def find_variants_for_product(product, variant_list):
+    return [v for v in variant_list if variant_belongs_to_product(v, product)]
+
+
+def variant_belongs_to_product(variant, product):
+    return variant["product"] == product["id"]
 
 
 if __name__ == "__main__":
