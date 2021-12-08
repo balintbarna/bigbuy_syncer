@@ -6,4 +6,4 @@ def read_api_key():
 
 
 api_key = read_api_key()
-print(api_key)
+print("using api key: {}".format(api_key))
