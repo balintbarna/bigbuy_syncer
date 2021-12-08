@@ -66,7 +66,12 @@ class CatalogData():
         print("number of items: {}".format(len(self.get_item_list())))
         print("number of tags: {}".format(len(self.tags.get_list())))
         for tag in self.tags.get_list():
-            self.find_item_for_tag(tag)
+            try:
+                self.find_item_for_tag(tag)
+            except Exception as e:
+                print("tag: {}".format(tag))
+                print(e)
+
 
 
     def find_item_for_tag(self, tag):
@@ -90,7 +95,7 @@ def variant_belongs_to_product(variant, product):
 
 
 def tag_belongs_to_item(tag, item):
-    return tag["sku"] == item["sku"]
+    return tag["id"] == item["id"]
 
 
 
