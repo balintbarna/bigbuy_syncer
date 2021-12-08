@@ -10,12 +10,8 @@ def get_manufacturers_url():
     return "{}/{}".format(get_catalog_url(), "manufacturers.json")
 
 
-def get_manufacturers_url_with_params(isoCode = "da"):
-    return "{}?isoCode={}".format(get_manufacturers_url(), isoCode)
-
-
 def request_manufacturers():
-    return requests.get(get_manufacturers_url_with_params(), headers=api.get_auth_header())
+    return requests.get(get_manufacturers_url(), headers=api.get_auth_header())
 
 
 def get_manufacturers():
