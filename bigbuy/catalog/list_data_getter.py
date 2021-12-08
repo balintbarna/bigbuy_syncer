@@ -7,9 +7,10 @@ from bigbuy.catalog.common import *
 
 
 class ListDataGetter():
-    def __init__(self, url_part, file_name) -> None:
+    def __init__(self, url_part, file_name, dummy=False) -> None:
         self.url_part = url_part
         self.file_name = file_name
+        self.dummy = dummy
         self._list = None
 
 
@@ -25,9 +26,9 @@ class ListDataGetter():
         return requests.get(self.get_url_with_params(), headers=api.get_auth_header())
 
 
-    def get_list(self, dummy=False):
+    def get_list(self):
         if not self._list:
-            self._list = self.download_list() if not dummy else self.get_dummy_list()
+            self._list = self.download_list() if not self.dummy else self.get_dummy_list()
         return self._list
 
 
@@ -49,7 +50,7 @@ class ListDataGetter():
     def save_dummy_list(self):
         script_dir = os.path.dirname(__file__)
         with open(os.path.join(script_dir, self.file_name), "w") as f:
-            return json.dump(self.get_list(), f)
+            return json.dump(self.download_list(), f)
 
 
 if __name__ == "__main__":

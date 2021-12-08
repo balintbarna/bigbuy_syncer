@@ -1,63 +1,89 @@
 import sys, os
 if __package__ is None:
     sys.path.append(os.getcwd())
-from bigbuy.catalog import product as p
-from bigbuy.catalog import variation as v
+from bigbuy.catalog.list_data_getter import ListDataGetter
 
 
-def get_products(dummy = False):
-    return p.get_products() if not dummy else p.get_dummy_products()
+class CatalogData():
+    def __init__(self, dummy=False) -> None:
+        self.products = ListDataGetter("products", "products.txt", dummy)
+        self.variants = ListDataGetter("productsvariations", "variations.txt", dummy)
+        self.attributes = ListDataGetter("attributes", "attributes.txt", dummy)
+        self.tags = ListDataGetter("productstags", "tags.txt", dummy)
 
 
-def get_variations(dummy = False):
-    return v.get_variations() if not dummy else v.get_dummy_variations()
-
-
-def find_matching_product_and_variant():
-    prods = get_products(dummy=True)
-    vars = get_variations(dummy=True)
-    for variant in vars:
-        for product in prods:
-            if variant["product"] == product["id"]:
-                print("found a match")
+    def find_matching_product_and_variant(self):
+        for product in self.products.get_list():
+            variants = self.find_variants_for_product(product)
+            if len(variants) > 0:
+                print("found matching variants")
                 print(product)
-                print(find_variants_for_product(product, vars))
+                print(variants)
                 return
 
 
-def compare_product_and_variant_numbers():
-    prods = get_products(dummy=True)
-    vars = get_variations(dummy=True)
-    print("number of products: {}".format(len(prods)))
-    print("number of variants: {}".format(len(vars)))
-    orphan_variant_ids = []
-    unique_product_ids = []
-    for variant in vars:
-        product_id = variant["product"]
-        if product_id not in unique_product_ids:
-            unique_product_ids.append(product_id)
-        if not find_product_for_variant(variant, prods):
-            orphan_variant_ids.append(variant["id"])
-    print("number of unique products in variants list: {}".format(len(unique_product_ids)))
-    print("number of orphan variants: {}".format(len(orphan_variant_ids)))
+    def cross_examine_product_and_variant_numbers(self):
+        print("number of products: {}".format(len(self.products.get_list())))
+        print("number of variants: {}".format(len(self.variants.get_list())))
+        orphan_variant_ids = []
+        unique_product_ids = []
+        for variant in self.variants.get_list():
+            product_id = variant["product"]
+            if product_id not in unique_product_ids:
+                unique_product_ids.append(product_id)
+            if not self.find_product_for_variant(variant):
+                orphan_variant_ids.append(variant["id"])
+        print("number of unique products in variants list: {}".format(len(unique_product_ids)))
+        print("number of orphan variants: {}".format(len(orphan_variant_ids)))
 
 
-def find_product_for_variant(variant, product_list):
-    matching_products = [p for p in product_list if variant_belongs_to_product(variant, p)]
-    if len(matching_products) > 1:
-        raise Exception("Variant matches multiple products, bad data")
-    if len(matching_products) < 1:
-        raise Exception("Variant has no matching product in database")
+    def find_product_for_variant(self, variant):
+        matching_products = [p for p in self.products.get_list() if variant_belongs_to_product(variant, p)]
+        if len(matching_products) > 1:
+            raise Exception("Variant matches multiple products, bad data")
+        if len(matching_products) < 1:
+            raise Exception("Variant has no matching product in database")
+        return matching_products
 
 
-def find_variants_for_product(product, variant_list):
-    return [v for v in variant_list if variant_belongs_to_product(v, product)]
+    def find_variants_for_product(self, product):
+        return [v for v in self.variants.get_list() if variant_belongs_to_product(v, product)]
+
+
+    def cross_examine_tags_and_products(self):
+        print("number of items: {}".format(len(self.get_item_list())))
+        print("number of tags: {}".format(len(self.tags.get_list())))
+        for tag in self.tags.get_list():
+            self.find_item_for_tag(tag)
+
+
+    def find_item_for_tag(self, tag):
+        matching_items = [item for item in self.get_item_list() if tag_belongs_to_item(tag, item)]
+        if len(matching_items) > 1:
+            raise Exception("Tag matches multiple items, bad data")
+        if len(matching_items) < 1:
+            raise Exception("Tag has no matching items in database")
+        return matching_items
+
+    def get_item_list(self):
+        return self.products.get_list() + self.variants.get_list()
+
+
+    def find_tags_for_item(self, item):
+        return [t["tag"] for t in self.tags.get_list() if tag_belongs_to_item(t, item)]
 
 
 def variant_belongs_to_product(variant, product):
     return variant["product"] == product["id"]
 
 
+def tag_belongs_to_item(tag, item):
+    return tag["sku"] == item["sku"]
+
+
+
 if __name__ == "__main__":
-    find_matching_product_and_variant()
-    compare_product_and_variant_numbers()
+    cd = CatalogData(True)
+    cd.find_matching_product_and_variant()
+    cd.cross_examine_product_and_variant_numbers()
+    cd.cross_examine_tags_and_products()
