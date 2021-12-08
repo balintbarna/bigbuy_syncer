@@ -10,6 +10,18 @@ class CatalogData():
         self.variants = ListDataGetter("productsvariations", "variations.txt", dummy)
         self.attributes = ListDataGetter("attributes", "attributes.txt", dummy)
         self.tags = ListDataGetter("productstags", "tags.txt", dummy)
+        self.information = ListDataGetter("productsinformation", "information.txt", dummy)
+        self.manufacturers = ListDataGetter("manufacturers", "manufacturers.txt", dummy)
+        self.images = ListDataGetter("productsimages", "images.txt", dummy)
+        self.list_of_lists = [
+            self.products,
+            self.variants,
+            self.attributes,
+            self.tags,
+            self.information,
+            self.manufacturers,
+            self.images,
+        ]
 
 
     def find_matching_product_and_variant(self):
@@ -84,6 +96,8 @@ def tag_belongs_to_item(tag, item):
 
 if __name__ == "__main__":
     cd = CatalogData(True)
+    for container in cd.list_of_lists:
+        container.save_dummy_list()
     cd.find_matching_product_and_variant()
     cd.cross_examine_product_and_variant_numbers()
     cd.cross_examine_tags_and_products()
