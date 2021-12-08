@@ -7,7 +7,7 @@ from bigbuy.catalog.common import *
 
 
 def get_tags_url():
-    return "{}/{}".format(get_catalog_url(), "tags.json")
+    return "{}/{}".format(get_catalog_url(), "productstags.json")
 
 
 def get_tags_url_with_params(isoCode = "da"):
