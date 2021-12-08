@@ -10,6 +10,7 @@ class ListDataGetter():
     def __init__(self, url_part, file_name) -> None:
         self.url_part = url_part
         self.file_name = file_name
+        self._list = None
 
 
     def get_url(self):
@@ -24,7 +25,13 @@ class ListDataGetter():
         return requests.get(self.get_url_with_params(), headers=api.get_auth_header())
 
 
-    def get_list(self):
+    def get_list(self, dummy=False):
+        if not self._list:
+            self._list = self.download_list() if not dummy else self.get_dummy_list()
+        return self._list
+
+
+    def download_list(self):
         r = self.request_data()
         if r.status_code == 200:
             return json.loads(r.text)
