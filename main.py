@@ -1,3 +1,3 @@
-import catalog
+import catalog.main as c
 
-products = catalog.get_products()
+products = c.get_products(dummy=True)
