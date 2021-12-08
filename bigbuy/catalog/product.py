@@ -3,7 +3,7 @@ if __package__ is None:
     sys.path.append(os.getcwd())
 import requests
 import json
-from common import *
+from bigbuy.catalog.common import *
 
 
 def get_products_url():

@@ -1,8 +1,8 @@
 import sys, os
 if __package__ is None:
     sys.path.append(os.getcwd())
-from catalog import product as p
-from catalog import variation as v
+from bigbuy.catalog import product as p
+from bigbuy.catalog import variation as v
 
 
 def get_products(dummy = False):
